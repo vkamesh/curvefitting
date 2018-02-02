@@ -167,9 +167,9 @@ for (size in 1:length(benchmarks)) {
   my_parameters_power[size,"power"]  <- benchmarks[size]
   my_parameters_power2[size,"power"]  <- benchmarks[size]
   
-  f <- frequency_M/1e3
+  f <- frequency_M
   V <- Voltage
-  P <- my_benchmark_power[,size]*1e-3
+  P <- my_benchmark_power[,size]
   
   cat("\tplotting figures...\n")
   
@@ -197,16 +197,16 @@ for (size in 1:length(benchmarks)) {
                      control=list(maxiter = 1000,
                                   #minFactor=1e-5,
                                   warnOnly=T),
-                     start = list(Pstatic = 1.5,
-                                  gamma = 0.2,
-                                  naC   = 0.3),
+                     start = list(Pstatic = 0.1,
+                                  gamma = 0.1,
+                                  naC   = 0.1),
                      # start = list(Pstat = 0.005,
                      #              gamma = 0.01,
                      #              naC   = 0.01),
                      trace = T,
                      algorithm = "port",
                      lower = c(0,0,0),
-                     upper = c(1.5,2000,2))
+                     upper = c(2,30,2))
   
   my_parameters_power[size, "Pstatic"] <- Pstatic <- coef(regression_power)[1]
   my_parameters_power[size, "gamma"]   <- gamma   <- coef(regression_power)[2]
