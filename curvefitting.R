@@ -6,9 +6,7 @@
 benchmarks = c("Gold-rader","Blowfish","SHA")
 frequency_M = c(100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500)
 frequency_G = c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5)
-#Voltage = c(1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21)
 Voltage = c(0.95,0.97,0.99,1.01,1.03,1.05,1.07,1.09,1.11,1.13,1.15,1.17,1.19,1.21,1.23)
-#Voltage <- c(0.925,0.950,0.950,0.950,0.975,1.000,1.025,1.075,1.125,1.175,1.225,1.250,1.275,1.325,1.350)
 
 #### Fitting execution time over frequency ####
 
@@ -22,12 +20,7 @@ prediction_time <- benchmark_time
 
 prediction_time_avg <- benchmark_time
 
-# Starting values for constants in the regression analysis
-# starting_values <- rbind(c(3.00,0.072,1.27),
-#                          c(10.0,0.072,1.27),
-#                          c(10.0,0.072,1.27))
-
-starting_values <- rbind(c(67.22,0.997,4.3495),
+starting_values <- rbind(c(3.0,0.072,1.27),
                          c(10.0,0.072,1.27),
                          c(10.0,0.072,1.27))
 
@@ -125,9 +118,6 @@ for(size in 1:length(benchmarks)) {
 print(((prediction_time - benchmark_time) / benchmark_time) * 100)
 
 
-
-
-
 #### Fitting power over frequency ####
 
 my_power_estimates <- read.table("av-power_vs_frequency.txt",sep="")
@@ -139,17 +129,9 @@ prediction_power <- my_power_estimates
 
 par(mfrow=c(1,1))
 
-#Start Matrix
-my_starters_power <- matrix(0,length(benchmarks), 5)
-colnames(my_starters_power) <- c("freq","power","Pstatic", "Ileak", "Dyn")
-
 #Matrix to hold the fitted parameters
 my_parameters_power <- matrix(0,length(benchmarks),4)
 colnames(my_parameters_power) <- c("power","Pstatic", "gamma", "naC")
-
-#Matrix to hold the fitted parameters
-my_parameters_power2 <- matrix(0,length(benchmarks),4)
-colnames(my_parameters_power2) <- c("power","Istatic", "Ileak", "naC")
 
 #Matrix to hold the fitted parameters
 compute_freq <- matrix(0,length(benchmarks),4)
@@ -162,10 +144,7 @@ total_power <- c()
 for (size in 1:length(benchmarks)) {
   
   cat("Benchmark:",benchmarks[size],"\n")
-  
-  my_starters_power[size,"power"]    <- benchmarks[size]
   my_parameters_power[size,"power"]  <- benchmarks[size]
-  my_parameters_power2[size,"power"]  <- benchmarks[size]
   
   f <- frequency_M
   V <- Voltage
@@ -200,9 +179,6 @@ for (size in 1:length(benchmarks)) {
                      start = list(Pstatic = 0.1,
                                   gamma = 0.1,
                                   naC   = 0.1),
-                     # start = list(Pstat = 0.005,
-                     #              gamma = 0.01,
-                     #              naC   = 0.01),
                      trace = T,
                      algorithm = "port",
                      lower = c(0,0,0),
@@ -241,7 +217,6 @@ for (size in 1:length(benchmarks)) {
 experimental_energy <- my_benchmark_power * my_benchmark_time
 
 theoretical_energy <- prediction_power * prediction_time
-#theoretical_energy <- my_benchmark_power * prediction_time
 
 plot(x=1,
      y=1,
