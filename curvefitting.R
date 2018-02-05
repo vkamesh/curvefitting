@@ -133,14 +133,6 @@ par(mfrow=c(1,1))
 my_parameters_power <- matrix(0,length(benchmarks),4)
 colnames(my_parameters_power) <- c("power","Pstatic", "gamma", "naC")
 
-#Matrix to hold the fitted parameters
-compute_freq <- matrix(0,length(benchmarks),4)
-colnames(compute_freq) <- c("power","Ptotal","Pstatic","Rt")
-
-errors <- c()
-Rt <- c()
-total_power <- c()
-
 for (size in 1:length(benchmarks)) {
   
   cat("Benchmark:",benchmarks[size],"\n")
