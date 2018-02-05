@@ -138,13 +138,13 @@ for (size in 1:length(benchmarks)) {
   cat("Benchmark:",benchmarks[size],"\n")
   my_parameters_power[size,"power"]  <- benchmarks[size]
   
-  f <- frequency_M
+  f <- frequency_M/1e3
   V <- Voltage
   P <- my_benchmark_power[,size]
   
   cat("\tplotting figures...\n")
   
-  plot(x=f,
+  plot(x=frequency_M,
        y=P,
        col="red",
        main=paste("Average power vs Frequency:", benchmarks[size]),
@@ -154,7 +154,6 @@ for (size in 1:length(benchmarks)) {
        lty="dashed",
        xlim=range(frequency_M),
        ylim=c(0,max(my_benchmark_power[,size]+5))
-       #ylim=c(0,60)
   )
   
   abline(v=(seq(0,1600,100)), h=(seq(0,60,5)), col="lightgray", lty="dotted")
@@ -168,13 +167,18 @@ for (size in 1:length(benchmarks)) {
                      control=list(maxiter = 1000,
                                   #minFactor=1e-5,
                                   warnOnly=T),
-                     start = list(Pstatic = 0.1,
-                                  gamma = 0.1,
-                                  naC   = 0.1),
+                     # start = list(Pstatic = 0.1,
+                     #              gamma = 0.1,
+                     #              naC   = 0.1),
+                     start = list(Pstatic = 1.43,
+                                  gamma = 12,
+                                  naC   = 6),
                      trace = T,
                      algorithm = "port",
-                     lower = c(0,0,0),
-                     upper = c(2,30,2))
+                     lower = c(1.4,0,2),
+                     upper = c(3,20,20))
+  
+  print(summary(regression_power))
   
   my_parameters_power[size, "Pstatic"] <- Pstatic <- coef(regression_power)[1]
   my_parameters_power[size, "gamma"]   <- gamma   <- coef(regression_power)[2]
@@ -183,24 +187,21 @@ for (size in 1:length(benchmarks)) {
   print(my_parameters_power)
 
   Vfit <- Voltage
-  freq_fit <- frequency_M
   P <- my_benchmark_power[,size]
-  f <- frequency_M
 
-  lines(x=f,
+  lines(x=frequency_M,
         y=P,
         col="blue",
         type="l")
 
-  lines(x=freq_fit,
-        y=(Pstatic+(1+Vfit*gamma)*1/2*naC*freq_fit*Vfit^2),
-        #y=Pstatic+1/2*naC*freq_fit*Vfit^2+Vfit*gamma,
+  lines(x=frequency_M,
+        y=(Pstatic+(1+Vfit*gamma)*1/2*naC*f*Vfit^2),
         col="red",
         type="o",
         pch=3,
         lty="dashed")
   
-  prediction_power[,size] <- (Pstatic+(1+Vfit*gamma)*1/2*naC*freq_fit*Vfit^2)
+  prediction_power[,size] <- (Pstatic+(1+Vfit*gamma)*1/2*naC*f*Vfit^2)
 
 }
 
@@ -239,7 +240,5 @@ for (size in 1:length(benchmarks)) {
         pch=size)
 
 }
-
-#seq.int(0.95, 1.25, length.out = 10)
 
 
