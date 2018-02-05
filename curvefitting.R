@@ -163,13 +163,9 @@ for (size in 1:length(benchmarks)) {
   cat("\tfitting default ...\n")
   
   regression_power <- nls(P ~ Pstatic + (1+V*gamma)*1/2*naC*f*V^2,
-                     #r2egression <- nls(P ~ Pstat + 1/2*naC*f*V^2 + gamma * V,
                      control=list(maxiter = 1000,
                                   #minFactor=1e-5,
                                   warnOnly=T),
-                     # start = list(Pstatic = 0.1,
-                     #              gamma = 0.1,
-                     #              naC   = 0.1),
                      start = list(Pstatic = 1.43,
                                   gamma = 12,
                                   naC   = 6),
