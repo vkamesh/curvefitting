@@ -1,12 +1,34 @@
 #### Set working directory ####
 #setwd("~/Documents/Telecom-Paristech/paper2/curvefitting/kamesh")
 
+
+#### Include libraries ####
+library(ggplot2)
+
+
+#### Declaration of functions ####
+# Function that returns Root Mean Squared Error
+rmse <- function(error)
+{
+  sqrt(mean(error^2))
+}
+
+# Function that returns Mean Absolute Error
+mae <- function(error)
+{
+  mean(abs(error))
+}
+
 #### Initialize parameters ####
 
 benchmarks = c("Gold-rader","Blowfish","SHA")
 frequency_M = c(100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500)
 frequency_G = c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5)
 Voltage = c(0.95,0.97,0.99,1.01,1.03,1.05,1.07,1.09,1.11,1.13,1.15,1.17,1.19,1.21,1.23)
+#Voltage = c(0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95)
+#Voltage = c(1.23,1.23,1.23,1.23,1.23,1.23,1.23,1.23,1.23,1.23,1.23,1.23,1.23,1.23,1.23)
+#Voltage = c(0.8,0.97,0.99,1.01,1.09,1.09,1.09,1.09,1.09,1.09,1.09,1.09,1.09,1.09,1.23)
+#Voltage = c(0.95,0.97,0.99,1.01,1.03,1.05,1.23,1.09,1.11,0.95,1.15,1.17,1.19,1.21,1.23)
 
 #### Fitting execution time over frequency ####
 
@@ -58,7 +80,7 @@ legend("topright",
 
 # Run the regression analysis (fitting) for each benchmark
 for(size in 1:length(benchmarks)) {
-  if(size < (length(benchmarks)+1)) {
+#  if(size < (length(benchmarks)+1)) {
     
     cat("Benchmark:",benchmarks[size],"\n")
     
@@ -88,14 +110,14 @@ for(size in 1:length(benchmarks)) {
     
     # Vertical asymptote is at infinity
     constant_parameters[size,"assym"] <- (constant_parameters[size,"cck"])^(1/constant_parameters[size,"beta"])
-     
+    print(constant_parameters)
     starting_values[size,1] <- constant_parameters[size,1]
     starting_values[size,2] <- constant_parameters[size,2]
     starting_values[size,3] <- constant_parameters[size,3]
 
     prediction_time[,size] <- (constant_parameters[size,"ccb"] / (x-constant_parameters[size,"cck"]) + constant_parameters[size,"beta"])
     
-  }
+ # }
   
   # Plot the data on the graph
   lines(x=x,
@@ -162,7 +184,7 @@ for (size in 1:length(benchmarks)) {
   
   cat("\tfitting default ...\n")
   
-  regression_power <- nls(P ~ Pstatic + (1+V*gamma)*1/2*naC*f*V^2,
+  regression_power <- nls(P ~ Pstatic + (1+V*gamma)*naC*f*V^2,
                      control=list(maxiter = 1000,
                                   #minFactor=1e-5,
                                   warnOnly=T),
@@ -191,13 +213,13 @@ for (size in 1:length(benchmarks)) {
         type="l")
 
   lines(x=frequency_M,
-        y=(Pstatic+(1+Vfit*gamma)*1/2*naC*f*Vfit^2),
+        y=(Pstatic+(1+Vfit*gamma)*naC*f*Vfit^2),
         col="red",
         type="o",
         pch=3,
         lty="dashed")
   
-  prediction_power[,size] <- (Pstatic+(1+Vfit*gamma)*1/2*naC*f*Vfit^2)
+  prediction_power[,size] <- (Pstatic+(1+Vfit*gamma)*naC*f*Vfit^2)
 
 }
 
@@ -234,7 +256,56 @@ for (size in 1:length(benchmarks)) {
         type="o",
         lty="solid",
         pch=size)
-
 }
 
+# # create a data frame
+# df = data.frame(frequency_M,experimental_energy,theoretical_energy)
+# #Set up canvas with outcome variable on y-axis
+# meow <- ggplot(df, aes(x = frequency_M, y = SHA)) +
+#         geom_point() +
+#         geom_line(size=0.5, color="red") +
+#         geom_line(aes(x=frequency_M, y = SHA.1), shape = 1, size=0.5, linetype = "dashed") +
+#         
+#         # geom_line(size=0.5, color="blue") +
+#         # geom_segment(aes(xend = frequency_M, yend = SHA.1), alpha = 0.5) +
+#         # geom_errorbar(aes(ymin=mean-SHA, ymax=mean+SHA)) +
+#         xlab("Frequency (MHz)") +
+#         ylab("Total energy consumption (mJ)") +
+#         ggtitle("Energy consumption vs Frequency (SHA)") +
+#         theme_bw()
+# 
+# #dd <- meow + labs(title = "", x = "", y= "")
+# print(meow)
 
+df2 <- data.frame(type=rep(c("experimental", "theoretical"), each=15),
+                  frequency_sha=rep(c(frequency_M),2),
+                  benchmark_sha=c(experimental_energy$SHA,theoretical_energy$SHA))
+
+meow <- ggplot(data=df2, aes(x=frequency_sha, y=benchmark_sha, group=type)) +
+  geom_line(aes(linetype=type, color=type))+
+  geom_point(aes(shape=type, color=type))
+
+print(meow)
+
+#### Printing results ####
+
+error_goldrader <- experimental_energy$`Gold-rader` - theoretical_energy$`Gold-rader`
+error_Blowfish <- experimental_energy$`Blowfish` - theoretical_energy$`Blowfish`
+error_sha <- experimental_energy$`SHA` - theoretical_energy$`SHA`
+
+cat("\t \n")
+cat("\t Goodness-of-Fit Statistics \n")
+cat("\t Printing root mean square error (rmse) and mean absolute error (mae) \n")
+cat("\t ==================================================================== \n")
+cat("\t \n")
+cat("\t Gold-rader: \n")
+print(rmse(error_goldrader))
+print(mae(error_goldrader))
+cat("\t \n")
+cat("\t Blowfish: \n")
+print(rmse(error_Blowfish))
+print(mae(error_Blowfish))
+cat("\t \n")
+cat("\t SHA: \n")
+print(rmse(error_sha))
+print(mae(error_sha))
