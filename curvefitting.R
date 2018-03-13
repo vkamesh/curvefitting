@@ -52,7 +52,7 @@ for(size in 1:length(benchmarks)) {
 #### Plot the execution time vs frequency ####
 plot(x=1,
      y=1,
-     main=paste("Total energy consumption vs Frequency"),
+     main=paste("Execution time vs Frequency"),
      xaxp  = c(0, 1500, 15),
      yaxp  = c(0, 800, 8),
      xlab= "Frequency (MHz)",
@@ -211,5 +211,4 @@ for (size in 1:length(benchmarks)) {
         lty="solid",
         pch=size)
 }
-
 

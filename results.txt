@@ -1,0 +1,95 @@
+****************KAREL**********************
+****************TIME***********************
+
+Formula: y[, size] ~ log((beta1/(x - beta2)) + (beta1 * beta3))
+
+Parameters:
+        Estimate Std. Error t value Pr(>|t|)    
+beta1  2.919e+03  1.090e+02  26.779 4.51e-12 ***
+beta2  1.292e-01  4.718e-03  27.376 3.48e-12 ***
+beta3 -1.816e-01  2.652e-02  -6.847 1.78e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.04632 on 12 degrees of freedom
+
+Algorithm "port", convergence message: relative convergence (4)
+
+             ccb       cck       beta     assym
+[1,]    1.942758 0.1338749 -0.1658627 184164.10
+[2,]    8.595603 0.1294849 -0.1670649 206058.07
+[3,]   31.100085 0.1365705 -0.1519612 489660.83
+[4,]  144.358580 0.1302339 -0.2020057  24122.88
+[5,]  670.799815 0.1298197 -0.1828268  70749.47
+[6,] 2918.837381 0.1291523 -0.1816074  78453.24
+
+****************KAREL***********************
+****************POWER***********************
+
+Formula: P ~ Pstat + (1 + V * gamma) * 1/2 * naC * f * V^2
+
+Parameters:
+       Estimate Std. Error t value Pr(>|t|)    
+Pstat   0.46441    0.01582  29.358 8.44e-12 ***
+gamma  37.65598  165.09559   0.228    0.824    
+naC     0.04004    0.17222   0.233    0.820    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.01921 on 11 degrees of freedom
+
+Algorithm "port", convergence message: relative convergence (4)
+
+     power   Pstatic     gamma        naC
+[1,]     6 0.4670914  3.389936 0.30907899
+[2,]     8 0.4670951  3.231604 0.31989906
+[3,]    10 0.4655438  2.801292 0.36126763
+[4,]    12 0.4586559  3.126702 0.36142059
+[5,]    14 0.4623639 24.504521 0.06139466
+[6,]    16 0.4644141 37.655980 0.04004119
+
+
+****************KAMESH**********************
+****************TIME************************
+
+Formula: y[, size] ~ (constant1 * ((1/(x_fit - constant2)) + constant3))
+
+Parameters:
+           Estimate Std. Error  t value Pr(>|t|)    
+constant1 6.515e+01  5.581e-02 1167.366  < 2e-16 ***
+constant2 4.654e-03  7.858e-05   59.222 3.55e-16 ***
+constant3 7.914e-03  1.238e-03    6.391 3.45e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.139 on 12 degrees of freedom
+
+Algorithm "port", convergence message: both X-convergence and relative convergence (5)
+
+                ccb         cck        beta
+Gold-rader 10.98673 0.006514109 0.098996532
+Blowfish   31.56960 0.004605930 0.004886518
+SHA        65.15413 0.004653675 0.007913866
+
+
+****************KAMESH**********************
+****************POWER***********************
+
+Formula: P ~ Pstatic + (1 + V * gamma) * naC * f * V^2
+
+Parameters:
+        Estimate Std. Error t value Pr(>|t|)
+Pstatic   1.8197     0.2113   8.610 1.76e-06 ***
+gamma     2.3153     2.3885   0.969    0.351    
+naC       2.7917     2.1370   1.306    0.216    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.2708 on 12 degrees of freedom
+
+Algorithm "port", convergence message: relative convergence (4)
+
+            Pstatic    gamma      naC
+Gold-rader 1.400000 8.508248 2.000000
+Blowfish   1.586224 4.112318 2.000000
+SHA        1.819703 2.315324 2.791747
